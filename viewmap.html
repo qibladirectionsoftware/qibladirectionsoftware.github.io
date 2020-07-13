@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Destination Point Map</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLMF4bZpLGH1WEJH0wSLKVyqrl2J7bSKo&language=id&region=ID""></script>
+	<script type="text/javascript">
+	//<![CDATA[
+	var map, infoWindow;
+	var lat = new Array();
+	var lng = new Array();
+	var markers=new Array();
+
+	function initialize() {
+	self.focus();
+	var search=window.location.search;
+	if (search.substring(0, 1) == "?") {
+	search = unescape(search.substring(1));
+	var params=search.split('&');
+	lat[0] = params[0];
+	lng[0]=params[1];
+	lat[1]=params[2];
+	lng[1]=params[3];
+	document.title = "Destination Point Map - Lat " + lat[0] + " Long " + lng[0];
+	infoWindow= new google.maps.InfoWindow( {
+	content: ""
+	});
+	var bounds=new google.maps.LatLngBounds();
+	var point, i;
+	for(i=0;i<lat.length;i++){
+	bounds.extend(new google.maps.LatLng(lat[i],lng[i]));
+	}
+	var options = {
+	zoom: 8,
+	center: new google.maps.LatLng(-34.397, 150.644),
+	mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById('map') , options);
+	map.fitBounds(bounds);
+	if(map.getZoom()>15) map.setZoom(15);
+
+	var path=[new google.maps.LatLng(lat[1],lng[1]), new google.maps.LatLng(lat[0],lng[0])];
+	var flightPath = new google.maps.Polyline({
+	path: path,
+	strokeColor: '#0000FF',
+	strokeOpacity: 1.0,
+	strokeWeight: 2,
+	geodesic: true
+	});
+	  flightPath.setMap(map);
+
+	for(i=0;i<lat.length;i++){
+	point=new google.maps.LatLng(lat[i],lng[i]);
+	markers[i]=createMarker(point,i);
+	markers[i].i=i;
+	}
+	}
+	}
+
+	function createMarker(point, i) {
+	var icon;
+	if (i==0) {
+	icon = 'img/green_Marker1.png';
+	} else {
+	icon = 'img/green_Marker0.png';
+	}
+	var shadow={
+	url: 'img/shadow50.png',
+	size: new google.maps.Size(37,34),
+	origin: new google.maps.Point(0,0),
+	anchor: new google.maps.Point(10, 34)
+	};
+	var marker=new google.maps.Marker({
+	position: point,
+	map: map,
+	icon: icon,
+	shadow: shadow
+	});
+	google.maps.event.addListener(marker, "click", function() {
+	var h;
+	if (marker.i==0) {
+	h=formatInfo('Destination point', marker.i);
+	} else {
+	h=formatInfo('Starting point', marker.i);
+	}
+	infoWindow.content=h;
+	infoWindow.open(map, marker);
+	});
+	return marker;
+	}
+
+	function formatInfo(s, i) {
+	var h='<div style="width: 16.5em"><p class="pz">' + s + '</p>';
+	if (!isNaN(lat[i])) {
+	h += '<div class="DWH">Latitude:<br>Longitude:</div><div class="DBL" onclick="selectText(this)">' + 
+	roundx(lat[i],6) + '<br>' + roundx(lng[i],6) + '</div><div class="DCL"></div>';
+	}
+	h += '<p class = "pz"><a class="bluelink" href="javascript:transfer(' + i + ')">Find nearby points of interest</a></p>'; 
+	h += '</div>';
+	return h;
+	}
+
+	function transfer(i) {
+	var a=['Destination++point','Starting++point'];
+	var l=lat[i];
+	var n=lng[i];
+	var u='l=' + l + '&n=' + n + '&ml=' + l + '&mn=' + n + '&cl=' + l + '&cn=' + n + '&z=' + map.getZoom() + '&a=' + a[i];
+	var m1="Click ok to transfer this marker to a page with a searchable map where you can search for nearby points of interest"; 
+	a=confirm(m1);
+	if (a) {
+	window.location="../meet/index.html?" + u; 
+	}
+	}
+
+	function selectText(myDiv){
+	if (window.getSelection) {
+	var selection = window.getSelection();
+	if (selection.setBaseAndExtent) {
+	selection.setBaseAndExtent(myDiv, 0, myDiv, 1);
+	} else {
+	var range = document.createRange();
+	range.selectNodeContents(myDiv);
+	selection.removeAllRanges();
+	selection.addRange(range);
+	}
+	} else {
+	var range = document.body.createTextRange();
+	range.moveToElementText(myDiv);
+	range.select();
+	}
+	}
+
+	function roundx(n, exp) {
+	return Math.round(n*Math.pow(10,exp))/Math.pow(10,exp);
+	}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+	//]]>
+	</script>
+</head>
+	
+<body>
+<div id="map" style="width: 680px; height: 475px; margin: 0 auto"></div>
+
+</body>
+</html>

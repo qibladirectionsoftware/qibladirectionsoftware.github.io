@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<header>
+	<title>
+		Web apps untuk kiblat
+	</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+	<!-- Bootstrap core CSS -->
+	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Custom fonts for this template -->
+	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+	<!-- Plugin CSS -->
+	<link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+	<!-- Custom styles for this template -->
+	<link href="css/freelancer.min.css" rel="stylesheet">
+</header>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+	<div class="container">
+		<a class="navbar-brand js-scroll-trigger" href="#page-top">QIBLA DIRECTION SOFTWARE</a>
+		<button class="navbar-toggler text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"> Menu
+	        <i class="fas fa-bars"></i>
+      	</button>
+	      <div class="collapse navbar-collapse" id="navbarResponsive">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item mx-0 mx-lg-1">
+	            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Download</a>
+	          </li>
+	          <li class="nav-item mx-0 mx-lg-1">
+	            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Tentang</a>
+	          </li>
+	          <li class="nav-item mx-0 mx-lg-1">
+	            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Kontak</a>
+	          </li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+
+	  <!-- Header -->
+	  <header class="masthead bg-primary text-white text-center">
+	    <div class="container">
+	      <img class="img-fluid mb-5 d-block mx-auto" src="img/logotok.png" alt="">
+	      <h2 class="text-uppercase mb-0">Qibla Direction Software - ITB</h2>
+	      <h5 class="font-weight-light mb-0">Perangkat Lunak Rekonstruksi Arah Kiblat Teliti</h5>
+	    </div>
+	  </header>
+
+ 	<script language="javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLMF4bZpLGH1WEJH0wSLKVyqrl2J7bSKo&language=id&region=ID"></script>
+	<script type="text/javascript" src="js/calculate.js"></script>
+
+	<!-- Portfolio Grid Section -->
+	<section class="portfolio" id="portfolio">
+		<div class="container">
+	    <h2 class="text-center text-uppercase text-secondary mb-0">Visualisasi Arah Azimuth Vincenty</h2>
+	    <hr class="star-dark mb-5">
+	    <div class="row text-center">
+		<form class="form" NAME="frm" id="frm" method="post" action="viewmap.php" style="width: 100%">
+			<div class="row text-center mb-3" id="startlatrow">
+				<div class="col-sm-12 text-center">
+					<label for="startlat" accesskey="L"><b>Koordinat Titik Berdiri Alat:</b></label>	<br>
+					<label for="startlat" accesskey="L">Lintang (derajat):</label>
+					<input type="text" id="startlat" value="" size="14" maxlength="14" onfocus="this.select()">&nbsp;&nbsp;
+					<label for="startlon" accesskey="N">Bujur (derajat):</label>
+					<input type="text" id="startlon" value="" size="14" maxlength="14" onfocus="this.select()">
+				</div>
+			</div>
+			<div class="row text-center mb-3" id="maxdistrow">
+				<div class="col-sm-12 text-center">
+					<label for="bearing" accesskey="B">Azimuth (0-360):</label>
+					<input type="text" id="bearing" value="" size="14" maxlength="14" onfocus="this.select()">&nbsp;&nbsp;&nbsp;
+					<label for="maxdist" accesskey="I">Jarak Elipsoid:</label>
+					<input type="text" id="dist" value="" size="14" maxlength="14" onfocus="this.select()">&nbsp;km
+				</div>
+			</div>
+			<div class="row text-center mb-3" id="ellipserow" style="display: none">
+				<div class="col-sm-12 text-center">
+					<label for="major">Parameter Ellipsoid  (meter):</label><br>
+					<label for="major">Jari-jari axis mayor (a):</label>
+					<input type="text" id="major" value="" size="14" maxlength="14" onfocus="this.select()">&nbsp;&nbsp;&nbsp;
+					<select id="param2">
+						<option selected>Jari-jari axis minor (b):</option>
+						<option>Penggepengan (1/f):</option>
+					</select>
+					<input type="text" id="minor" value="" size="14" maxlength="14" onfocus="this.select()">
+				</div>
+			</div>
+			<div class="row text-center mb-3">
+				<div class="col-sm-12 text-center">
+					<label for="model" accesskey="M">Model Bumi:</label>
+					<select id="model" onchange="setEllipse()">
+						<option>Bola</option>
+						<option selected>WGS84 ellipsoid</option>
+						<option>Airy modified ellipsoid</option>
+						<option>Australian ellipsoid</option>
+						<option>Bessel (1841) ellipsoid</option>
+						<option>Clarke (1866)/NAD27 ellipsoid</option>
+						<option>Clarke (1880) ellipsoid</option>
+						<option>Everest (1830) ellipsoid</option>
+						<option>GRS80 ellipsoid</option>
+						<option>International/Hayford ellipsoid</option>
+						<option>Krasovsky ellipsoid</option>
+						<option>South American (1969) ellipsoid</option>
+						<option>WGS72 ellipsoid</option>
+						<option>Custom ellipsoid</option>
+					</select>
+				</div>
+			</div>
+			<div class="row text-center mb-3">
+				<div class="col-sm-12 text-center">
+					<input type="button" class="btn btn-primary" value="Hitung" accesskey="C" onclick="calculate()">&nbsp;&nbsp;
+					<input type="button" class="btn btn-danger" value="Hapus" accesskey="0" onclick="resetValues()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+			</div>
+			<div class="row text-center mb-3">
+				<div class="col-sm-12 text-center">
+					<label for="destination" id="destinationlabel" accesskey="P"><b>Koordinat Tujuan:</b></label><br>
+						<textarea class="results" id="destination" cols="52" rows="4" readonly="readonly" onfocus="this.select()" onclick="this.select()"></textarea>
+				</div>
+			</div>
+			<div class="row text-center mb-3">
+				<div class="col-sm-12 text-center">
+					<input type="button" class="btn btn-success" value="Visualisasi" Id="map" onClick="viewMap()">
+				</div>
+			</div>
+		</form>
+		</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	  <footer class="footer text-center">
+	    <div class="container">
+	      <div class="row">
+	        <div class="col-md-6 mb-5 mb-lg-0">
+	          <h4 class="text-uppercase mb-4">ALAMAT</h4>
+	          <p class="lead mb-0">Lab. KK Geodesi - Gd. Labtek IX C Lt. 4
+	            <br>Jl. Ganesha no 10, Bandung</p>
+	        </div>
+	        <div class="col-md-6 mb-5 mb-lg-0">
+	          <h4 class="text-uppercase mb-4">Ikuti Kami</h4>
+	          <ul class="list-inline mb-0">
+	            <li class="list-inline-item">
+	              <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+	                <i class="fab fa-fw fa-facebook-f"></i>
+	              </a>
+	            </li>
+	            <li class="list-inline-item">
+	              <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+	                <i class="fab fa-fw fa-google-plus-g"></i>
+	              </a>
+	            </li>
+	            <li class="list-inline-item">
+	              <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+	                <i class="fab fa-fw fa-twitter"></i>
+	              </a>
+	            </li>
+	            <li class="list-inline-item">
+	              <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+	                <i class="fab fa-fw fa-linkedin-in"></i>
+	              </a>
+	            </li>
+	            <li class="list-inline-item">
+	              <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+	                <i class="fab fa-fw fa-dribbble"></i>
+	              </a>
+	            </li>
+	          </ul>
+	        </div>
+	      </div>
+	    </div>
+	  </footer>
+
+	  <div class="copyright py-4 text-center text-white">
+	    <div class="container">
+	      <small>Copyright &copy; KK Geodesi ITB 2019</small>
+	    </div>
+	  </div>
+
+	<!-- Bootstrap core JavaScript -->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Plugin JavaScript -->
+	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+	<!-- Contact Form JavaScript -->
+	<script src="js/jqBootstrapValidation.js"></script>
+	<script src="js/contact_me.js"></script>
+
+	<!-- Custom scripts for this template -->
+	<script src="js/freelancer.min.js"></script>
+</body>
+</html>
