@@ -1,5 +1,5 @@
 //modified from http://www.geomidpoint.com/
-google.load('maps','3');
+google.load('maps','3', {other_params: "sensor=false"});
 
 var query='';
 var lats = new Array(10);
